@@ -1,59 +1,62 @@
 const mongoose = require('mongoose');
 const bcrypt   = require('bcrypt');
-const EMAIL_PATTERN = '';
 const SALT_FACTOR   = 10;
+const EMAIL_PATTERN    = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+const PASSWORD_PATTERN = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])/;
+const URL_PATTERN      = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
 
 
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
-    required: true,
+    required: 'UserName is required',
     unique: true,
     trim: true
   },
   email: {
     type: String,
-    required: true,
+    required: 'Email is required',
     unique: true,
     trim: true,
-    match: EMAIL_PATTERN
+    match: [EMAIL_PATTERN, 'Invalid email pattern']
   },
   password: {
     type: String,
-    required: true,
+    required: 'Password is required',
     minlength: 8,
-    // uppercase: true,
-    // lowercase: true
+    match: [PASSWORD_PATTERN, 'Invalid password pattern (at least 8 characters with any uppercase, lowercase and digit)']
+  },
+  avatarURL: {
+    type: String,
+    default: 'http://gravatar.com/avatar/?s=80&d=mm',
+    match: [URL_PATTERN, 'Invalid url pattern']
   } 
 }, {
   timestamps: true,
   toJSON: {
-    transform: function(doc, ret) {
-      ret.id = ret._id;
+    transform: (doc, ret) => {
+      ret.id = ret._id; // ret.id = doc._id //???
       delete ret._id,
       delete ret.__v;
+      delete ret.password;
       return ret;
     }
   }
 })
 
-// TODO: Validaciones
-
-userSchema.pre('save', function(next){
+userSchema.pre('save', function(next) {
   const user = this;
-  if (user.isModified('password')) {
+  if ( !user.isModified('password') ) { next(); }
+  else {
     bcrypt.genSalt(SALT_FACTOR)
-      .then(salt => {
+      .then( salt => {
         return bcrypt.hash(user.password, salt)
-          .then(hash => {
+          .then( hash => {
             user.password = hash;
             next();
           })
       })
       .catch(next)
-  }
-  else {
-    next()
   }
 });
 
