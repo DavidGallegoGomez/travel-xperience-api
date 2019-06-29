@@ -17,7 +17,7 @@ module.exports.authenticate = (req, res, next) => {
     if (error) next(error)
     else if (!user) throw createError(401, message)
     else {
-      req.login(user, error => {
+      req.login(user, (error) => {
         if (error) next(error)
         else res.status(201).json(user)
       })
@@ -35,11 +35,12 @@ module.exports.getProfile = (req, res, next) => {
 }
 
 module.exports.editProfile = (req, res, next) => {
-  delete req.body.email;
+  console.log('BOBY', req.body);
+  // delete req.body.email;
 
   const user = req.user;
   Object.keys(req.body).forEach( prop => { user[prop] = req.body[prop] } );
-  // if (req.file) user.avatarURL = req.file.secure_url;
+  if (req.file) user.avatarURL = req.file.secure_url;
 
   user.save()
     .then( user => res.status(201).json(user) )
