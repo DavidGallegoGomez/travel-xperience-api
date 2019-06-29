@@ -1,6 +1,6 @@
 const mongoose   = require('mongoose');
-const MongoStore = require('connect-mongo')(session);
 const session    = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 const SESSION_MAX_AGE = Number(process.env.SESSION_MAX_AGE);
 
 module.exports = session({

@@ -29,7 +29,8 @@ const userSchema = new mongoose.Schema({
   avatarURL: {
     type: String,
     default: 'http://gravatar.com/avatar/?s=80&d=mm',
-    match: [URL_PATTERN, 'Invalid url pattern']
+    // TODO: Mejorar la validación
+    // match: [URL_PATTERN, 'Invalid url pattern']
   } 
 }, {
   timestamps: true,
