@@ -13,8 +13,16 @@ const checklistSchema = new mongoose.Schema({
     minlength: 50
   }
 }, {
-  timestamps: true
-})
+  timestamps: true,
+  toJSON: {
+    transform: (doc, ret) => {
+      ret.id = doc._id;
+      delete ret._id;
+      delete ret.__v;      
+      return ret;
+    }
+  }
+});
 
 const Checklist = mongoose.model('Checklist', checklistSchema);
 module.exports = Checklist;

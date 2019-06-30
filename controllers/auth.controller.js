@@ -35,7 +35,6 @@ module.exports.getProfile = (req, res, next) => {
 }
 
 module.exports.editProfile = (req, res, next) => {
-  console.log('BOBY', req.body);
   // delete req.body.email;
 
   const user = req.user;
