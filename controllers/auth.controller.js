@@ -19,7 +19,9 @@ module.exports.authenticate = (req, res, next) => {
     else {
       req.login(user, (error) => {
         if (error) next(error)
-        else res.status(201).json(user)
+        else {
+          res.status(201).json(user);
+        }
       })
     }
   })(req, res, next);

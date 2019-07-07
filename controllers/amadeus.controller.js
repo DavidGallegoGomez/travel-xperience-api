@@ -1,5 +1,6 @@
 const createError = require('http-errors');
 const Amadeus = require('amadeus');
+const constants = require('../constants');
 
 // TODO: Meter esta parte en un config, exportarlo e importar ese config
 let amadeus = new Amadeus({
@@ -8,15 +9,7 @@ let amadeus = new Amadeus({
 });
 
 module.exports.getFlight = (req, res, next) => {
-  /*
-  User.findOne( {email: req.body.email} )
-    .then( user => {
-      if (user) throw createError(409, 'User already registered')
-      else return new User(req.body).save()
-    } )
-    .then( user => res.status(201).json(user) )
-    .catch(next)
-  */
+  // TODO: Llevar a un Service!!!
   amadeus.shopping.flightOffers.get({
     origin: 'MAD',
     destination: 'BOS',
@@ -26,14 +19,8 @@ module.exports.getFlight = (req, res, next) => {
   })
     .then( response => { 
       // console.log(response.body);   //=> The raw body
-      
-      // res.json(res.result);
-      
       console.log(response.result); //=> The fully parsed result
       res.status(200).json(response.result);
-      
-      // console.log( JSON.stringify( response.data ) );
-      
       // console.log(response.data);
     })
     .catch( error => { 
@@ -41,4 +28,34 @@ module.exports.getFlight = (req, res, next) => {
       // console.log(error.response.request); //=> The details of the request made
       console.log(error.code); //=> A unique error code to identify the type of error
     });
+}
+
+module.exports.getHotel = (req, res, next) => {
+  amadeus.shopping.hotelOffers.get( { cityCode: 'AGP' } )
+    .then( response => { res.status(200).json(response.result); } )
+    .catch( error => { console.log(error.code); } )
+}
+
+module.exports.getPOI = (req, res, next) => {
+  amadeus.referenceData.locations.pointsOfInterest.get({
+    latitude: 41.397158,
+    longitude: 2.160873,
+    radius: 2.00
+  })
+    .then( response => { res.status(200).json(response.result); } )
+    .catch( error => { console.log(error.code); } )
+}
+
+module.exports.getCities = (req, res, next) => {
+  amadeus.referenceData.locations.get({
+    keyword: 'MAL',
+    countryCode: 'ES',
+    subType: 'AIRPORT'
+  })
+  .then( response => { 
+    res.status(200).json(response.data);
+    // const { name, id, iataCode, subType, timeZoneOffset, geoCode } = cities[1]; // response.data[1]
+    // 'name' tiene el valor de response.data[i].name
+  })
+  .catch( error => { console.log(error.code); } )
 }

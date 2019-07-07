@@ -13,8 +13,9 @@ const session = require('./configs/session.config');
 require('./configs/passport.config');
 const cors = require('./configs/cors.config');
 
-const authRouter = require('./routes/auth.routes')
-const amadeusRouter = require('./routes/amadeus.routes')
+const authRouter = require('./routes/auth.routes');
+const amadeusRouter = require('./routes/amadeus.routes');
+const countryRouter = require('./routes/country.routes');
 
 const app = express();
 
@@ -31,6 +32,7 @@ app.use(passport.session());
 
 app.use('/', authRouter);
 app.use('/amadeus', amadeusRouter);
+app.use('/country-list', countryRouter);
 
 // 404, Not Found
 app.use( function (req, res, next) { next(createError(404)) } );
