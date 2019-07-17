@@ -11,10 +11,10 @@ let amadeus = new Amadeus({
 module.exports.getFlight = (req, res, next) => {
   // TODO: Llevar a un Service!!!
   amadeus.shopping.flightOffers.get({
-    origin: 'MAD',
-    destination: 'BOS',
-    departureDate: '2019-08-19',
-    returnDate: '2019-10-08',
+    origin: req.query.origin,
+    destination: req.query.destination,
+    departureDate: req.query.departureDate,
+    returnDate: req.query.returnDate,
     nonStop: true
   })
     .then( response => { 
@@ -31,15 +31,15 @@ module.exports.getFlight = (req, res, next) => {
 }
 
 module.exports.getHotel = (req, res, next) => {
-  amadeus.shopping.hotelOffers.get( { cityCode: 'AGP' } )
+  amadeus.shopping.hotelOffers.get( { cityCode: req.query.cityCode } )
     .then( response => { res.status(200).json(response.result); } )
     .catch( error => { console.log(error.code); } )
 }
 
 module.exports.getPOI = (req, res, next) => {
   amadeus.referenceData.locations.pointsOfInterest.get({
-    latitude: 41.397158,
-    longitude: 2.160873,
+    latitude: req.query.latitude,
+    longitude: req.query.longitude,
     radius: 2.00
   })
     .then( response => { res.status(200).json(response.result); } )
