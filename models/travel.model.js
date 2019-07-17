@@ -2,27 +2,14 @@ const mongoose  = require('mongoose');
 const constants = require('../constants');
 
 const travelSchema = new mongoose.Schema({
-  city: { // From API
+  cityOrigin: {
     type: String,
     required: true
   },
-  country: { // From API
+  cityDestination: {
     type: String,
     required: true
   },
-  // TODO
-  /*
-  tourismType: {
-    type: String,
-    enum: constants.tourismType,
-    required: true
-  },
-  economy: {
-    type: String,
-    enum: constants.economy,
-    required: true
-  },
-  */
   date_from: {
     type: Date,
     required: true

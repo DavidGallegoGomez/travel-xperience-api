@@ -47,12 +47,16 @@ module.exports.getPOI = (req, res, next) => {
 }
 
 module.exports.getCities = (req, res, next) => {
-  amadeus.referenceData.locations.get({
-    keyword: 'MAL',
-    countryCode: 'ES',
-    subType: 'AIRPORT'
-  })
+  amadeus.referenceData.locations.get(
+    { keyword: req.query.keyword,
+      countryCode: req.query.countryCode,
+      subType: 'AIRPORT'
+    }
+  )
   .then( response => { 
+    console.log('***********************');
+    console.log(req.query);
+    console.log('***********************');
     res.status(200).json(response.data);
     // const { name, id, iataCode, subType, timeZoneOffset, geoCode } = cities[1]; // response.data[1]
     // 'name' tiene el valor de response.data[i].name
