@@ -40,7 +40,7 @@ module.exports.getPOI = (req, res, next) => {
   amadeus.referenceData.locations.pointsOfInterest.get({
     latitude: req.query.latitude,
     longitude: req.query.longitude,
-    radius: 2.00
+    radius: 10
   })
     .then( response => { res.status(200).json(response.result); } )
     .catch( error => { console.log(error.code); } )
@@ -58,8 +58,6 @@ module.exports.getCities = (req, res, next) => {
     console.log(req.query);
     console.log('***********************');
     res.status(200).json(response.data);
-    // const { name, id, iataCode, subType, timeZoneOffset, geoCode } = cities[1]; // response.data[1]
-    // 'name' tiene el valor de response.data[i].name
   })
   .catch( error => { console.log(error.code); } )
 }
