@@ -40,7 +40,7 @@ module.exports.getPOI = (req, res, next) => {
   amadeus.referenceData.locations.pointsOfInterest.get({
     latitude: req.query.latitude,
     longitude: req.query.longitude,
-    radius: 10
+    radius: 20 // Debe ser un entero en el rango 0-20
   })
     .then( response => { res.status(200).json(response.result); } )
     .catch( error => { console.log(error.code); } )
